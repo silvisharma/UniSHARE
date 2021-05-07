@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import com.example.unishare.R
-import com.example.unishare.ui.refer.ReferViewModel
 
 
 class LogoutFragment : Fragment() {

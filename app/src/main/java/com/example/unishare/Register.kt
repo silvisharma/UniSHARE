@@ -7,10 +7,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 
 
 class Register : AppCompatActivity() {
+
     private lateinit var r_email: EditText
     private lateinit var r_password: EditText
     private lateinit var r_confirm: EditText
@@ -22,6 +25,7 @@ class Register : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
 
         r_email = findViewById(R.id.update_email)
         r_password = findViewById(R.id.r_password)
@@ -59,7 +63,7 @@ class Register : AppCompatActivity() {
         finish()
     }
 
-    private fun registerUser(email: String, password: String,) {
+    private fun registerUser(email: String, password: String) {
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {

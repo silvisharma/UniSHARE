@@ -14,5 +14,6 @@
     <string name="menu_refer">Refer to a friend</string>
     <string name="menu_logout">Logout</string>
     <string name="or">or</string>
+    <string name="send_to">refer</string>
 
 </resources>

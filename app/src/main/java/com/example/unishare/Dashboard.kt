@@ -2,6 +2,7 @@ package com.example.unishare
 
 import android.R.attr
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -18,26 +19,38 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.dynamiclinks.ktx.androidParameters
+import com.google.firebase.dynamiclinks.ktx.dynamicLink
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.dynamiclinks.ktx.iosParameters
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 
 
 class Dashboard : AppCompatActivity() {
-    private companion object{
+
+
+
+    private companion object {
         private const val Tag = "Dashboard"
+        private const val DEEP_LINK_URL = "https://unishare.page.link"
     }
+
     private lateinit var auth: FirebaseAuth
+
     // Cloud Storage
     private val storage = Firebase.storage("gs://unishare-fbdc1.appspot.com")
     var storageRef = storage.reference
     val PICK_IMAGE_REQUEST = 71
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    private fun uploadNewFile(){
+    private fun uploadNewFile() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
@@ -46,7 +59,7 @@ class Dashboard : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-//
+
         if (requestCode === PICK_IMAGE_REQUEST && resultCode === RESULT_OK && attr.data != null && attr.data != null) {
             val filePath = data!!.data!!
             val riversRef = storageRef.child("images/${filePath.lastPathSegment}")
@@ -67,9 +80,12 @@ class Dashboard : AppCompatActivity() {
         }
 
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
+
+
         auth = Firebase.auth
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -78,8 +94,8 @@ class Dashboard : AppCompatActivity() {
         fab.setOnClickListener {
             uploadNewFile()
         }
-        val navigationView : NavigationView  = findViewById(R.id.nav_view)
-        val headerView : View = navigationView.getHeaderView(0)
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val headerView: View = navigationView.getHeaderView(0)
 
         val userEmail = headerView.findViewById<TextView>(R.id.userDisplayEmail)
         val userName = headerView.findViewById<TextView>(R.id.userDisplayName)
@@ -89,6 +105,16 @@ class Dashboard : AppCompatActivity() {
         userEmail.text = user.email
         userName.text = user.displayName
         userPhoto.setImageURI(user.photoUrl)
+        val dynamicLink = Firebase.dynamicLinks.dynamicLink {
+            link = Uri.parse("https://www.example.com/")
+            domainUriPrefix = "https://unishare.page.link"
+            // Open links with this app on Android
+            androidParameters { }
+            // Open links with com.example.ios on iOS
+            iosParameters("com.example.ios") { }
+        }
+
+        val dynamicLinkUri = dynamicLink.uri
 
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
@@ -104,8 +130,10 @@ class Dashboard : AppCompatActivity() {
                 R.id.nav_logout
             ), drawerLayout
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -115,12 +143,16 @@ class Dashboard : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.action_settings){
+        if (item.itemId == R.id.action_settings) {
             Log.i(Tag, "Logout")
             auth.signOut()
             val logoutIntent = Intent(this, MainActivity::class.java)
             logoutIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(logoutIntent)
+        } else if (item.itemId == R.id.action_share) {
+            Log.i(Tag, "Share from")
+
+
         }
         return super.onOptionsItemSelected(item)
     }
@@ -129,4 +161,11 @@ class Dashboard : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-}
+
+
+
+    }
+
+
+
+
