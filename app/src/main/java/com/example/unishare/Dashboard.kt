@@ -143,19 +143,23 @@ class Dashboard : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_settings) {
+        if(item.itemId == R.id.action_settings){
             Log.i(Tag, "Logout")
             auth.signOut()
             val logoutIntent = Intent(this, MainActivity::class.java)
             logoutIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(logoutIntent)
-        } else if (item.itemId == R.id.action_share) {
-            Log.i(Tag, "Share from")
-
-
+        }
+        else if(item.itemId == R.id.action_github){
+            Log.i(Tag, "Contact Developer")
+//            auth.signOut()
+            val logoutIntent = Intent(this, MainActivity::class.java)
+            logoutIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(logoutIntent)
         }
         return super.onOptionsItemSelected(item)
     }
+
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)

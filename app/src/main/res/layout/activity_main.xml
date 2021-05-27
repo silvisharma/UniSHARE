@@ -80,10 +80,10 @@
         android:layout_height="55dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_marginTop="108dp"
+        android:layout_marginTop="118dp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signInButton" />
 
@@ -99,7 +99,7 @@
         app:layout_constraintVertical_bias="0.673" />
 
     <Button
-        android:id="@+id/registerButton"
+        android:id="@+id/btn"
         android:layout_width="200dp"
         android:layout_height="52dp"
         android:background="@drawable/roundedcorner"
@@ -116,15 +116,29 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="24dp"
-        android:layout_height="21dp"
+        android:layout_width="19dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="23dp"
         android:text="@string/or"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/googleSignIn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+        app:layout_constraintTop_toBottomOf="@+id/btn" />
+
+    <Button
+        android:id="@+id/forget"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_marginTop="564dp"
+        android:text="Forget Password?"
+        android:textColor="@color/grey"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.878"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

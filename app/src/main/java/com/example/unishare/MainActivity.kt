@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -14,18 +15,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.NonCancellable.start
+import java.util.concurrent.ForkJoinWorkerThread
 
 class MainActivity : AppCompatActivity() {
     private lateinit var signInEmail: EditText
     private lateinit var signInPassword: EditText
     private lateinit var signInButton: Button
     private lateinit var registerButton: Button
+    private lateinit var forget: TextView
     private lateinit var auth: FirebaseAuth
     val RC_SIGN_IN : Int = 1;
     private val TAG = "MainActivity"
@@ -82,10 +81,13 @@ class MainActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+
                     // Sign in success, update UI with the signed-in user's information
 //                    val user = auth.currentUser
-                    reload()
-                } else {
+                   reload()
+                }
+                    else
+                    {
                     // If sign in fails, display a message to the user.
                     Log.w("signInWithEmail:failure", task.exception)
                     Toast.makeText(baseContext, "Authentication failed.",
@@ -146,15 +148,21 @@ class MainActivity : AppCompatActivity() {
         signInEmail = findViewById(R.id.signInEmail)
         signInPassword = findViewById(R.id.signInPassword)
         signInButton = findViewById(R.id.signInButton)
-        registerButton = findViewById(R.id.registerButton)
+        registerButton = findViewById(R.id.btn)
+        forget = findViewById(R.id.forget)
+
+
         // google signin button
         var gsignin = findViewById<View>(R.id.googleSignIn) as SignInButton
+
 
 
         // creating instance for firebase
         auth = FirebaseAuth.getInstance()
         setupGoogleLogin()
         // trigger email/pass create user
+
+
         signInButton.setOnClickListener {
             val email = signInEmail.text.toString()
             val password = signInPassword.text.toString()
@@ -174,14 +182,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+
         gsignin.setOnClickListener {
             signIn()
         }
-
+        forget.setOnClickListener {
+            val intent = Intent(this,ForgetPassword::class.java)
+            startActivity(intent)
+            finish()
+        }
 
 
     }// onCreate
-
 }// class
 
 
